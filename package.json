@@ -1,0 +1,30 @@
+{
+  "name": "cloudant-user",
+  "version": "0.0.1",
+  "description": "Helper module to use standard CouchDB _users db on a Cloudant db",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/doublerebel/cloudant-user"
+  },
+  "keywords": [
+    "cloudant",
+    "couchdb",
+    "user"
+  ],
+  "author": "Charles Phillips <charles@doublerebel.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/doublerebel/cloudant-user/issues"
+  },
+  "homepage": "https://github.com/doublerebel/cloudant-user",
+  "dependencies": {
+    "cradle": "~0.6.7"
+  },
+  "devDependencies": {
+    "iced-coffee-script": "~1.7.0"
+  }
+}
