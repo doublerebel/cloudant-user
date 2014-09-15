@@ -2,11 +2,13 @@
 
 Helper module to use standard CouchDB _users db on a Cloudant db.
 
+## Installation
+POST `_security-docs/_security-custom.json` to youruser.cloudant.com/yourdbname/_security to enable standard CouchDB auth for that database.
+
 *Most of this would work on a normal CouchDB instance, but Cloudant requires the salt and sha1-hashed password to be included with user creation.*
 
-Based off of [a gist](https://gist.github.com/weilu/10445007) by [weilu](https://github.com/weilu).
+## Usage:
 
-usage:
 ```coffee
 CloudantUser = require "cloudant-user"
 
@@ -31,5 +33,7 @@ callback = (err, res) ->
 cloudantUser = new CloudantUser server, adminuser
 cloudantUser.create newuser.name, newuser.pass, newuser.roles..., callback
 ```
+
+This module is based off of [a gist](https://gist.github.com/weilu/10445007) by [weilu](https://github.com/weilu).
 
 Copyright 2014 doublerebel.  MIT licensed.

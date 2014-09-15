@@ -1,0 +1,9 @@
+{
+  "cloudant": {
+    "nobody": []
+  },
+  "readers": {
+    "names":[],
+    "roles":[]
+  }
+}
