@@ -22,13 +22,14 @@ adminuser =
 newuser =
   name: your-newuser-name
   pass: your-newuser-pass
+  roles: ["_reader","_writer"]
 
 callback = (err, res) ->
     console.log err if err
     console.log res if res
 
 cloudantUser = new CloudantUser server, adminuser
-cloudantUser.create newuser.name, newuser.pass, callback
+cloudantUser.create newuser.name, newuser.pass, newuser.roles..., callback
 ```
 
 Copyright 2014 doublerebel.  MIT licensed.

@@ -3,6 +3,13 @@ crypto = require "crypto"
 
 
 class CloudantUser
+  defaultRoles: [
+    "_default"
+    "_reader"
+    "_creator"
+    "_writer"
+  ]
+
   constructor: (@server, @adminuser) ->
     unless @server?.host    then throw new Error "server.host required"
     unless @adminuser?.name then throw new Error "adminuser.name required"
@@ -26,18 +33,21 @@ class CloudantUser
     )
     @db = @conn.database "_users"
 
-  create: (name, password, autocb) ->
+  create: (name, password, roles..., cb) ->
     await @exists name, defer err, doc
-    return (err or error: "user_exists") unless doc is false
+    return (cb err or error: "user_exists") unless doc is false
 
+    roles = @defaultRoles unless roles.length
     hashAndSalt = @generatePasswordHash password
+
     @db.save (@couchUser name),
       name: name
       password_sha: hashAndSalt[0]
       salt: hashAndSalt[1]
       password_scheme: "simple"
       type: "user"
-    , autocb
+      roles: roles
+    , cb
 
   get: (name, callback) -> @db.get (@couchUser name), callback
 

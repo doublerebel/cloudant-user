@@ -50,6 +50,8 @@
   crypto = require("crypto");
 
   CloudantUser = (function() {
+    CloudantUser.prototype.defaultRoles = ["_default", "_reader", "_creator", "_writer"];
+
     function CloudantUser(server, adminuser) {
       var _ref, _ref1;
       this.server = server;
@@ -84,10 +86,11 @@
       return this.db = this.conn.database("_users");
     };
 
-    CloudantUser.prototype.create = function(name, password, autocb) {
-      var doc, err, hashAndSalt, ___iced_passed_deferral, __iced_deferrals, __iced_k;
-      __iced_k = autocb;
+    CloudantUser.prototype.create = function() {
+      var cb, doc, err, hashAndSalt, name, password, roles, ___iced_passed_deferral, __iced_deferrals, __iced_k, _i;
+      __iced_k = __iced_k_noop;
       ___iced_passed_deferral = iced.findDeferral(arguments);
+      name = arguments[0], password = arguments[1], roles = 4 <= arguments.length ? __slice.call(arguments, 2, _i = arguments.length - 1) : (_i = 2, []), cb = arguments[_i++];
       (function(_this) {
         return (function(__iced_k) {
           __iced_deferrals = new iced.Deferrals(__iced_k, {
@@ -102,27 +105,29 @@
                 return doc = arguments[1];
               };
             })(),
-            lineno: 29
+            lineno: 36
           }));
           __iced_deferrals._fulfill();
         });
       })(this)((function(_this) {
         return function() {
           if (doc !== false) {
-            autocb(err || {
+            return cb(err || {
               error: "user_exists"
             });
-            return;
+          }
+          if (!roles.length) {
+            roles = _this.defaultRoles;
           }
           hashAndSalt = _this.generatePasswordHash(password);
-          autocb(_this.db.save(_this.couchUser(name), {
+          return _this.db.save(_this.couchUser(name), {
             name: name,
             password_sha: hashAndSalt[0],
             salt: hashAndSalt[1],
             password_scheme: "simple",
-            type: "user"
-          }, autocb));
-          return;
+            type: "user",
+            roles: roles
+          }, cb);
         };
       })(this));
     };
