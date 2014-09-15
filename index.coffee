@@ -26,7 +26,7 @@ class CloudantUser
 
   connect: ->
     @conn = new (cradle.Connection)(
-      secure: @server.secure? or true
+      secure: if @server.secure? then @server.secure else true
       auth:
         username: @adminuser.name
         password: @adminuser.pass
@@ -51,14 +51,14 @@ class CloudantUser
 
   get: (name, callback) -> @db.get (@couchUser name), callback
 
-  exists: (name, autocb) ->
-    await @db.get name, defer err, doc
+  exists: (name, cb) ->
+    await @db.get (@couchUser name), defer err, doc
     if err?.error is "not_found"
-      autocb err, false
+      cb err, false
     else if doc
-      autocb null, doc
+      cb null, doc
     else
-      autocb err
+      cb err
 
   update: (name, props, autocb) ->
     return error: "properties for user required" unless props
