@@ -60,8 +60,8 @@ class CloudantUser
     else
       cb err
 
-  update: (name, props, autocb) ->
-    return error: "properties for user required" unless props
+  update: (name, props, cb) ->
+    cb error: "properties for user required" unless props
 
     {password} = props
     if password
@@ -71,7 +71,7 @@ class CloudantUser
       props.salt = hashAndSalt[1]
       props.password_scheme = "simple"
 
-    @db.merge (@couchUser name), props, autocb
+    @db.merge (@couchUser name), props, cb
 
   remove: (name, callback) -> @db.remove name, callback
 

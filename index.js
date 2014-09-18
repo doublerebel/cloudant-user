@@ -132,13 +132,12 @@
       })(this));
     };
 
-    CloudantUser.prototype.update = function(name, props, autocb) {
+    CloudantUser.prototype.update = function(name, props, cb) {
       var hashAndSalt, password;
       if (!props) {
-        autocb({
+        cb({
           error: "properties for user required"
         });
-        return;
       }
       password = props.password;
       if (password) {
@@ -148,8 +147,7 @@
         props.salt = hashAndSalt[1];
         props.password_scheme = "simple";
       }
-      autocb(this.db.merge(this.couchUser(name), props, autocb));
-      return;
+      return this.db.merge(this.couchUser(name), props, cb);
     };
 
     CloudantUser.prototype.remove = function(name, callback) {

@@ -23,7 +23,7 @@
   "homepage": "https://github.com/doublerebel/cloudant-user",
   "dependencies": {
     "cradle": "~0.6.7",
-    "iced-runtime": "^1.0.1"
+    "iced-runtime": "~1.0.1"
   },
   "devDependencies": {
     "iced-coffee-script": "~1.7.0"

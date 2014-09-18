@@ -2,7 +2,7 @@
 {spawn} = require 'child_process'
 
 task 'build', 'Build lib/ from src/', ->
-  coffee = spawn 'iced', ['--runtime', 'inline', '-c', '-o', 'lib', 'src']
+  coffee = spawn 'iced', ['--runtime', 'node', '-c', '-o', './', 'src']
   coffee.stderr.on 'data', (data) ->
     process.stderr.write data.toString()
   coffee.stdout.on 'data', (data) ->
@@ -12,7 +12,7 @@ task 'build', 'Build lib/ from src/', ->
 
 
 task 'watch', 'Watch src/ for changes', ->
-  coffee = spawn 'iced', ['-w', '--runtime', 'inline', '-c', '-o', 'lib', 'src']
+  coffee = spawn 'iced', ['-w', '--runtime', 'node', '-c', '-o', './', 'src']
   coffee.stderr.on 'data', (data) ->
     process.stderr.write data.toString()
   coffee.stdout.on 'data', (data) ->
