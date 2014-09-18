@@ -5,6 +5,8 @@ Helper module to use standard CouchDB _users db on a Cloudant db.
 ## Installation
 POST `_security-docs/_security-custom.json` to youruser.cloudant.com/yourdbname/_security to enable standard CouchDB auth for that database.
 
+POST `_security-docs/_security-default.json` to youruser.cloudant.com/yourdbname/_security to reset auth to Cloudant management for that database.
+
 *Most of this would work on a normal CouchDB instance, but Cloudant requires the salt and sha1-hashed password to be included with user creation.*
 
 ## Usage:
