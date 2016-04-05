@@ -49,6 +49,23 @@ class CloudantUser
       roles: roles
     , cb
 
+  npmCreate: (name, password, email, roles..., cb) ->
+    await @exists name, defer err, doc
+    return (cb err or error: "user_exists") unless doc is false
+
+    roles = @defaultRoles unless roles.length
+    hashAndSalt = @generatePasswordHash password
+
+    @db.save (@couchUser name),
+      name: name
+      password_sha: hashAndSalt[0]
+      salt: hashAndSalt[1]
+      password_scheme: "simple"
+      type: "user"
+      email: email
+      roles: roles
+    , cb
+
   get: (name, callback) -> @db.get (@couchUser name), callback
 
   exists: (name, cb) ->

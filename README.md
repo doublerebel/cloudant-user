@@ -127,6 +127,9 @@ cloudantUser.create(newuser.name,
 
 ## Extra help
 
+### Users need to change their own password
+On Cloudant, a user without both roles "_reader" and "_writer" will be unable to change their password.  Therefore, all normal users should be created with these roles.
+
 ### Futon on Cloudant
 Futon is available for any Cloudant database at https://cloudant.com/futon .  Login there with your Cloudant account username and password.
 
