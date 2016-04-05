@@ -4,7 +4,8 @@
   "description": "Helper module to use standard CouchDB _users db on a Cloudant db",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/iced --bare --map --runtime node -o ./ -c src/"
   },
   "repository": {
     "type": "git",
