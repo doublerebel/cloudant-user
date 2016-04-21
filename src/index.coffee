@@ -11,24 +11,20 @@ class CloudantUser
     "_writer"
   ]
 
-  constructor: (@server, @adminuser) ->
-    unless @server?.host    then throw new Error "server.host required"
-    unless @adminuser?.name then throw new Error "adminuser.name required"
-    @server.port   or= 443
-    @server.secure  ?= true
+  constructor: (@server) ->
+    unless @server?.host then throw new Error "server.host required"
+    unless @server.auth.username then throw new Error "server.auth.username required"
+    @server.secure  ?= /https/.exec @server.host
+    @server.port   or= if @server.secure then 443 else 80
+    @server.cache    = false
+    @server.timeout  = 5000
+
     @connect()
 
   couchUser: (name) -> "org.couchdb.user:#{name}"
 
   connect: ->
-    @conn = new (cradle.Connection) @server.host, @server.port,
-      cache:   false
-      timeout: 5000
-      secure:  @server.secure
-      auth:
-        username: @adminuser.name
-        password: @adminuser.pass
-
+    @conn = new (cradle.Connection) @server
     @db = @conn.database "_users"
 
   create: (name, password, roles..., cb) ->

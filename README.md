@@ -65,30 +65,31 @@ curl -X PUT -d @_security-docs/_security-cloudant.json https://youruser.cloudant
 ### Create a user with any set of roles
 Example scripts to add a user to Cloudant.  Create one of these scripts and run with `coffee scriptname.coffee` or `node scriptname.js`.
 
+Server options are passed directly to [cradle](https://github.com/flatiron/cradle).
+
 #### CoffeeScript
 ```coffee
 CloudantUser = require "cloudant-user"
 
 server =
   host: your-cloudant-user.cloudant.com
-  port: 80
+  port: 443
   secure: true
-
-adminuser =
-  name: "your-admin-username"
-  pass: "your-admin-password"
+  auth:
+    username: "your-admin-username"
+    password: "your-admin-password"
 
 newuser =
   name: "your-newuser-name"
-  pass: "your-newuser-pass"
+  password: "your-newuser-pass"
   roles: ["_reader","_writer"]
 
 callback = (err, res) ->
     console.log err if err
     console.log res if res
 
-cloudantUser = new CloudantUser server, adminuser
-cloudantUser.create newuser.name, newuser.pass, newuser.roles..., callback
+cloudantUser = new CloudantUser server
+cloudantUser.create newuser.name, newuser.password, newuser.roles..., callback
 ```
 
 #### JavaScript
@@ -97,18 +98,17 @@ var CloudantUser = require("cloudant-user");
 
 var server = {
   host: your-cloudant-user.cloudant.com,
-  port: 80,
-  secure: true
-};
-
-var adminuser = {
-  name: "your-admin-username",
-  pass: "your-admin-password"
+  port: 443,
+  secure: true,
+  auth: {
+    username: "your-admin-username",
+    password: "your-admin-password"
+  }
 };
 
 var newuser = {
   name: "your-newuser-name",
-  pass: "your-newuser-pass",
+  password: "your-newuser-pass",
   roles: ["_reader", "_writer"]
 };
 
@@ -117,9 +117,9 @@ var callback = function(err, res) {
   if (res) return console.log(res);
 };
 
-var cloudantUser = new CloudantUser(server, adminuser);
+var cloudantUser = new CloudantUser(server);
 cloudantUser.create(newuser.name,
-                    newuser.pass,
+                    newuser.password,
                     newuser.roles[0],
                     newuser.roles[1],
                     callback);
