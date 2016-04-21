@@ -1,5 +1,6 @@
 cradle = require "cradle"
 crypto = require "crypto"
+extend = (require "util")._extend
 
 
 class CloudantUser
@@ -31,37 +32,28 @@ class CloudantUser
     @db = @conn.database "_users"
 
   create: (name, password, roles..., cb) ->
+    @createWithMeta name, password, roles..., null, cb
+
+  createWithMeta: (name, password, roles..., metadata = {}, cb) ->
     await @exists name, defer err, doc
     return (cb err or error: "user_exists") unless doc is false
 
     roles = @defaultRoles unless roles.length
     hashAndSalt = @generatePasswordHash password
 
-    @db.save (@couchUser name),
+    user =
       name: name
       password_sha: hashAndSalt[0]
       salt: hashAndSalt[1]
       password_scheme: "simple"
       type: "user"
       roles: roles
-    , cb
+
+    extend user, metadata
+    @db.save (@couchUser name), user, cb
 
   npmCreate: (name, password, email, roles..., cb) ->
-    await @exists name, defer err, doc
-    return (cb err or error: "user_exists") unless doc is false
-
-    roles = @defaultRoles unless roles.length
-    hashAndSalt = @generatePasswordHash password
-
-    @db.save (@couchUser name),
-      name: name
-      password_sha: hashAndSalt[0]
-      salt: hashAndSalt[1]
-      password_scheme: "simple"
-      type: "user"
-      email: email
-      roles: roles
-    , cb
+    @createWithMeta name, password, roles..., {email}, cb
 
   get: (name, callback) -> @db.get (@couchUser name), callback
 
