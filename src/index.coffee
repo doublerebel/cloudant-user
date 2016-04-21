@@ -13,24 +13,21 @@ class CloudantUser
   constructor: (@server, @adminuser) ->
     unless @server?.host    then throw new Error "server.host required"
     unless @adminuser?.name then throw new Error "adminuser.name required"
-
-    cradle.setup
-      host: @server.host
-      port: @server.port or 80
-      cache: false
-      timeout: 5000
-
+    @server.port   or= 443
+    @server.secure  ?= true
     @connect()
 
   couchUser: (name) -> "org.couchdb.user:#{name}"
 
   connect: ->
-    @conn = new (cradle.Connection)(
-      secure: if @server.secure? then @server.secure else true
+    @conn = new (cradle.Connection) @server.host, @server.port,
+      cache:   false
+      timeout: 5000
+      secure:  @server.secure
       auth:
         username: @adminuser.name
         password: @adminuser.pass
-    )
+
     @db = @conn.database "_users"
 
   create: (name, password, roles..., cb) ->
