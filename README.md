@@ -125,6 +125,22 @@ cloudantUser.create(newuser.name,
                     callback);
 ```
 
+### cloudantUser.npmCreate()
+Create a user with email (required by npm)
+```coffee
+npmCreate(username, password, email, roles..., callback)
+```
+
+### cloudantUser.createWithMeta()
+Create a user with arbitrary metadata
+```coffee
+metadata =
+  shrike: true
+  timewarp: false
+
+createWithMeta(username, password, email, roles..., metadata, callback)
+```
+
 ## Extra help
 
 ### Users need to change their own password
@@ -135,7 +151,7 @@ Futon is available for any Cloudant database at https://cloudant.com/futon .  Lo
 
 ## Contributors
 
-This module is based off of [a gist](https://gist.github.com/weilu/10445007) by [weilu](https://github.com/weilu).
+This module is originally based off of [a gist](https://gist.github.com/weilu/10445007) by [weilu](https://github.com/weilu).
 
 ## License
 Copyright 2014-2016 doublerebel.  MIT licensed.
