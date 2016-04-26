@@ -14,20 +14,21 @@ extend = (require("util"))._extend;
 CloudantUser = (function() {
   CloudantUser.prototype.defaultRoles = ["_default", "_reader", "_creator", "_writer"];
 
-  function CloudantUser(server, adminuser) {
-    var _base, _base1, _ref, _ref1;
+  function CloudantUser(server) {
+    var _base, _base1, _ref;
     this.server = server;
-    this.adminuser = adminuser;
     if (!((_ref = this.server) != null ? _ref.host : void 0)) {
       throw new Error("server.host required");
     }
-    if (!((_ref1 = this.adminuser) != null ? _ref1.name : void 0)) {
-      throw new Error("adminuser.name required");
+    if (!this.server.auth.username) {
+      throw new Error("server.auth.username required");
     }
-    (_base = this.server).port || (_base.port = 443);
-    if ((_base1 = this.server).secure == null) {
-      _base1.secure = true;
+    if ((_base = this.server).secure == null) {
+      _base.secure = /https/.exec(this.server.host);
     }
+    (_base1 = this.server).port || (_base1.port = this.server.secure ? 443 : 80);
+    this.server.cache = false;
+    this.server.timeout = 5000;
     this.connect();
   }
 
@@ -36,15 +37,7 @@ CloudantUser = (function() {
   };
 
   CloudantUser.prototype.connect = function() {
-    this.conn = new cradle.Connection(this.server.host, this.server.port, {
-      cache: false,
-      timeout: 5000,
-      secure: this.server.secure,
-      auth: {
-        username: this.adminuser.name,
-        password: this.adminuser.pass
-      }
-    });
+    this.conn = new cradle.Connection(this.server);
     return this.db = this.conn.database("_users");
   };
 
@@ -76,7 +69,7 @@ CloudantUser = (function() {
               return doc = arguments[1];
             };
           })(),
-          lineno: 37
+          lineno: 33
         }));
         __iced_deferrals._fulfill();
       });
@@ -135,7 +128,7 @@ CloudantUser = (function() {
               return doc = arguments[1];
             };
           })(),
-          lineno: 60
+          lineno: 56
         }));
         __iced_deferrals._fulfill();
       });
