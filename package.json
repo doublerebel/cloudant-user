@@ -1,6 +1,6 @@
 {
   "name": "cloudant-user",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Helper module to use standard CouchDB _users db on a Cloudant db",
   "main": "index.js",
   "scripts": {
